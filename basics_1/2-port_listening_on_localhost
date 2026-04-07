@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# This script listens on localhost port 98 and prints everything received
+
+# Use built-in bash redirection to simulate listening on port 98
+while true; do
+    # Use a named pipe to pass data
+    mkfifo /tmp/pipe98
+    cat /tmp/pipe98
+    rm /tmp/pipe98
+done
