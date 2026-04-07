@@ -8,12 +8,12 @@ fi
 
 tmp_file=$(mktemp)
 
-grep -v "127.0.0.1 localhost" /etc/hosts > "$tmp_file"
-grep -v "127.0.0.2 localhost" "$tmp_file" > "${tmp_file}.2"
-mv "${tmp_file}.2" "$tmp_file"
-
-echo "127.0.0.2 localhost" >> "$tmp_file"
+# Put correct entries FIRST
+echo "127.0.0.2 localhost" > "$tmp_file"
 echo "8.8.8.8 facebook.com" >> "$tmp_file"
+
+# Add the rest of hosts file WITHOUT old entries
+grep -v -E "127.0.0.1 localhost|127.0.0.2 localhost|facebook.com" /etc/hosts >> "$tmp_file"
 
 cat "$tmp_file" > /etc/hosts
 rm "$tmp_file"
