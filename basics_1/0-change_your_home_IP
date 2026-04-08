@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-# This script updates /etc/hosts to set localhost to 127.0.0.2
-# and facebook.com to 8.8.8.8
+# This script configures localhost to 127.0.0.2 and facebook.com to 8.8.8.8
 
-# Backup hosts file
-cp /etc/hosts /etc/hosts.bak
+# Re-run with sudo if not root
+if [ "$(id -u)" -ne 0 ]; then
+    exec sudo "$0" "$@"
+fi
 
-# Remove any existing localhost or facebook.com lines to avoid duplicates
-sed -i '/127.0.0.1 localhost/d' /etc/hosts 2>/dev/null
-sed -i '/127.0.0.2 localhost/d' /etc/hosts 2>/dev/null
-sed -i '/8.8.8.8 facebook.com/d' /etc/hosts 2>/dev/null
-
-# Add the correct entries
-echo "127.0.0.2 localhost" >> /etc/hosts
-echo "8.8.8.8 facebook.com" >> /etc/hosts
+# Overwrite /etc/hosts with ONLY required entries
+tee /etc/hosts > /dev/null <<EOF
+127.0.0.2 localhost
+8.8.8.8 facebook.com
+EOF
